@@ -1,0 +1,31 @@
+name: PR Checkstyle Report
+on:
+  pull_request: 
+    types: [opened, reopened, synchronize]
+
+jobs:
+  action-demo:
+    runs-on: ubuntu-latest 
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-java@v3
+        with:
+          distribution: 'zulu' 
+          java-version: '11'
+          cache: maven
+      - run: cd demo && mvn package
+      - run: cd demo && mvn checkstyle:checkstyle
+
+      - uses: hyp0th3rmi4/checkstyle-markdown
+        with: 
+          REPORT_PATH: demo/target/checkstyle-result.xml
+          OUTPUT_PATH: demo/target/checkstyle-result.md
+          ERROR_ICON: ":x:"
+          WARNING_ICON: ":warning:"
+          INFO_ICON: ":envelope:"
+
+      - uses: machine-learning-apps/pr-comment@master
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          path: target/checkstyle-result.md 

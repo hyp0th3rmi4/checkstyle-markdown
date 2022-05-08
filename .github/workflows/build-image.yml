@@ -1,0 +1,19 @@
+name: Build Image
+on:
+  pull_request: 
+    types: [opened, reopened, synchronize]
+  create:
+    tags:
+      - v*
+
+jobs:
+  build-image:
+    runs-on: ubuntu-latest
+    steps:
+      - name: 👀   Checkout Source
+        uses: actions/checkout@v3
+      - name: 🧬  Determine Version
+        id: get_version
+        run: if [[ $GITHU_REF == refs/tags/* ]]; echo ::set-output name=VERSION::${GITHUB_REF/refs\/tags\/}; else; echo ::set-output name=VERSION::latest; fi
+      - name: 🏗  Build Docker Image
+        run: VERSION=${{ steps.get_version.outputs.VERSION }} make image
