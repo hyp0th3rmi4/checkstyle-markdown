@@ -1,0 +1,32 @@
+name: "Checkstyle to Markdown"
+description: "Converts a checkstyle report into a Markdown document"
+author: "hyp0th3rmi4@gmail.com"
+
+inputs: 
+  REPORT_PATH:
+    description: "Path to the checkstyle report, relative to the repository root."
+    required: true
+  OUTPUT_PATH:
+    description: "Path to the output location where the markdown file will be saved, relative to the repository root."
+    required: true
+  ROOT_PREXIX:
+    description: "Root path for the java source code (default: src/main/java)."
+    required: false
+  ERROR_ICON:
+    description: "Icon used for representing error messages (default: `ERROR`)."
+    required: false
+  WARNING_ICON:
+    description: "Icon used for representing warning messages (default: `WARNING`)."
+    required: false
+  INFO_ICON:
+    description: "Icon used for representing info messages (default: `INFO`)."
+    required: false
+    
+runs:
+  using: "docker"
+  image: "Dockerfile"
+
+
+branding:
+  icon: "file-text"
+  color: "purple"
