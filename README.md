@@ -10,7 +10,7 @@ Add `.github/workflows/publish-checkstyle.yaml` with the following:
 name: PR Checkstyle Report
 on:
   pull_request: 
-    types: [opened, reopened, synchronise]
+    types: [opened, reopened, synchronize]
 
 jobs:
   build-and-check:
@@ -22,14 +22,14 @@ jobs:
         distribution: 'zulu' 
         java-version: '11'
         cache: maven
-    - run: mvn package
+    - run: mvn checkstyle:checkstyle
 
     - uses: hyp0th3rmi4/checkstyle-markdown
       with: 
-        REPORT_PATH: target/checkstyle.xml
-        OUTPUT_PATH: target/checkstyle.md
+        REPORT_PATH: target/checkstyle-result.xml
+        OUTPUT_PATH: target/checkstyle-result.md
 ```
-> **NOTE**: The example assumes the GitHub repository containing Java source code with a standard Apache Maven project. The checkstyle plugin has been configured to output the result of the analysis to the path repository path: `target/checkstyle.md`.
+> **NOTE**: The example assumes the GitHub repository containing Java source code with a standard Apache Maven project. The checkstyle plugin has been configured to output the result of the analysis to the path repository path: `target/checkstyle-result.md` (default behaviour).
 
 As previously mentioned the action can be used in conjunction with the action [PR Comment from File](https://github.com/marketplace/actions/pr-comment-from-file) to publish the Markdown document as a PR comment:
 
@@ -49,12 +49,12 @@ jobs:
         distribution: 'zulu' 
         java-version: '11'
         cache: maven
-    - run: mvn package
+    - run: mvn checkstyle:checkstyle
 
     - uses: hyp0th3rmi4/checkstyle-markdown
       with: 
-        REPORT_PATH: target/checkstyle.xml
-        OUTPUT_PATH: target/checkstyle.md
+        REPORT_PATH: target/checkstyle-result.xml
+        OUTPUT_PATH: target/checkstyle-result.md
 
     - uses: machine-learning-apps/pr-comment@master
       env:
@@ -86,8 +86,8 @@ Below is an example for generating a report that uses emojis and modifies the de
     - name: Checkstyle to Markdown
       uses: hyp0th3rmi4/checkstyle-markdown@v1
       with:
-        REPORT_PATH: application/target/checkstyle.xml
-        OUTPUT_PATH: application/target/checkstyle.md
+        REPORT_PATH: application/target/checkstyle-result.xml
+        OUTPUT_PATH: application/target/checkstyle-result.md
         ROOT_PREFIX: src/code/java/
         ERROR_ICON: ":x:"
         WARNING_ICON: ":warning:"
